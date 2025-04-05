@@ -27,3 +27,13 @@ MonoBehaviour:
     m_SpecifySize: 0
     m_Name: Screenshot 2023-12-02 191238
     m_Texture: {fileID: 2800000, guid: 7c0d8d1d3613a5c459266cc9f7890cd5, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5397244866659588955
+      m_GuidHigh: 17419441106334518960
+    m_SerializedTextureGuid:
+      m_GuidLow: 17317632789991049812
+      m_GuidHigh: 6185754048335116474
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: mars
+    m_Texture: {fileID: 2800000, guid: 0e12ca549745f054baf8f28e8836d855, type: 3}
