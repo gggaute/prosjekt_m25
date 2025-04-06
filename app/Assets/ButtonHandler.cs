@@ -5,28 +5,75 @@ using UnityEngine.Video;
 
 public class ButtonHandler : MonoBehaviour
 {
-    public void LoadStoryScene()
+    public static Dictionary<string, List<StoryStep>> stories;
+
+    void Awake()
     {
-        // Create a dummy story with some steps
-        List<StoryStep> story = new List<StoryStep>();
+        stories = new Dictionary<string, List<StoryStep>>
+        {
+            {
+                "marker1", new List<StoryStep>
+                {
+                    new StoryStep
+                    {
+                        text = "Marker 1 - Step 1",
+                        image = Resources.Load<Texture>("Overlay1/liv"),
+                        video = null
+                    },
+                    new StoryStep
+                    {
+                        text = "Marker 1 - Step 2",
+                        image = null,
+                        video = Resources.Load<VideoClip>("Overlay1/video")
+                    }
+                }
+            },
+            {
+                "marker2", new List<StoryStep>
+                {
+                    new StoryStep
+                    {
+                        text = "Marker 2 - Intro",
+                        image = Resources.Load<Texture>("Overlay2/bird"),
+                        video = null
+                    },
+                    new StoryStep
+                    {
+                        text = "Marker 2 - step 2",
+                        image = null,
+                        video = Resources.Load<VideoClip>("Overlay2/dota")
+                    }
+                }
+            },
+            {
+                "marker3", new List<StoryStep>
+                {
+                    new StoryStep
+                    {
+                        text = "Marker 3 - Welcome",
+                        image = null,
+                        video = Resources.Load<VideoClip>("Overlay1/video")
+                    },
+                    new StoryStep
+                    {
+                        text = "Marker 3 - step 2",
+                        image = Resources.Load<Texture>("Overlay3/screenshot"),
+                        video = null
+                    }
+                }
+            }
+        };
+    }
+    public void LoadStoryScene(string marker)
+    {
 
-        var step1 = new StoryStep();
-        step1.text = "Welcome to the story!";
-        step1.image = Resources.Load<Texture2D>("liv");
-        step1.video = Resources.Load<VideoClip>("video");
-        //another step
-        var step2 = new StoryStep();
-        step2.text = "Welcome to the second story!";
-        step2.image = Resources.Load<Texture2D>("bird");
-        step2.video = Resources.Load<VideoClip>("dota");
+        if (stories.ContainsKey(marker))
+        {
+            // Set the static holder
+            StoryContainer.currentStory = stories[marker];
 
-        story.Add(step1);
-        story.Add(step2);
-
-        // Set the static holder
-        StoryContainer.currentStory = story;
-
-        // Load the AR scene
-        SceneManager.LoadScene("AR");
+            // Load the AR scene
+            SceneManager.LoadScene("AR");
+        }
     }
 }
