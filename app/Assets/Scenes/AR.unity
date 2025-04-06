@@ -272,7 +272,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 308483480}
         m_TargetAssemblyTypeName: StoryManager, Assembly-CSharp
-        m_MethodName: previousStep
+        m_MethodName: PreviousStep
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1650,7 +1650,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 308483480}
         m_TargetAssemblyTypeName: StoryManager, Assembly-CSharp
-        m_MethodName: nextStep
+        m_MethodName: NextStep
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

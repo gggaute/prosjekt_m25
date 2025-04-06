@@ -29,6 +29,7 @@ public class StoryManager : MonoBehaviour
 
     public void NextStep()
     {
+        Debug.Log("NextStep method called");
         if (currentStepIndex < storySteps.Count - 1)
         {
             currentStepIndex++;
@@ -38,6 +39,7 @@ public class StoryManager : MonoBehaviour
 
     public void PreviousStep()
     {
+        Debug.Log("NextStep method called");
         if (currentStepIndex > 0)
         {
             currentStepIndex--;

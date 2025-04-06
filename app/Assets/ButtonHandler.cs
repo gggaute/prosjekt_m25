@@ -16,7 +16,7 @@ public class ButtonHandler : MonoBehaviour
         step1.video = Resources.Load<VideoClip>("video");
         //another step
         var step2 = new StoryStep();
-        step2.text = "Welcome to the story!";
+        step2.text = "Welcome to the second story!";
         step2.image = Resources.Load<Texture2D>("bird");
         step2.video = Resources.Load<VideoClip>("dota");
 
