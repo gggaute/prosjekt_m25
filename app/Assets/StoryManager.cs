@@ -10,13 +10,13 @@ public class StoryManager : MonoBehaviour
     public RawImage imageElement;
     public VideoPlayer videoPlayer;
 
-    private List<StoryStep> storySteps;
+    private List<ContentStep> storySteps;
     private int currentStepIndex = 0;
 
     void Start()
     {
         // Grab the story from the container
-        storySteps = new List<StoryStep>(StoryContainer.currentStory);
+        storySteps = new List<ContentStep>(ContentContainer.currentContent.steps);
 
         if (storySteps == null || storySteps.Count == 0)
         {
