@@ -10,6 +10,10 @@ public class StoryManager : MonoBehaviour
     public RawImage imageElement;
     public VideoPlayer videoPlayer;
 
+    [SerializeField]
+
+    public List<GameObject> liste = new List<GameObject>(); 
+
     private List<ContentStep> storySteps;
     private int currentStepIndex = 0;
 
