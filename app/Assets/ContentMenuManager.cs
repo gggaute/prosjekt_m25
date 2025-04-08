@@ -8,7 +8,7 @@ public class ContentMenuManager : MonoBehaviour
 {
     [Header("UI References")]
     public GameObject contentMenuContainer; // ContentMenuContainer panel
-    public Transform buttonContainer;     // VerticalContainer (has VerticalLayoutGroup)
+    public Transform content;     // VerticalContainer (has VerticalLayoutGroup)
     public GameObject contentButtonPrefab;  // Button prefab (assigned in Inspector)
 
     public void OpenMenu(string markerId)
@@ -23,11 +23,11 @@ public class ContentMenuManager : MonoBehaviour
         // Instantiate buttons for each content piece
         foreach (var item in contentItems)
         {
-            GameObject buttonGO = Instantiate(contentButtonPrefab, buttonContainer);
+            GameObject buttonGO = Instantiate(contentButtonPrefab, content);
 
             // Assume the prefab has a TMP child named TitleText and TypeText
-            buttonGO.transform.Find("TitleText").GetComponent<TextMeshProUGUI>().text = item.title;
-            buttonGO.transform.Find("TypeText").GetComponent<TextMeshProUGUI>().text = $"{item.type} - {item.source}";
+            buttonGO.transform.Find("TitleText").GetComponent<TextMeshProUGUI>().text = $"Title: {item.title}";
+            buttonGO.transform.Find("TypeText").GetComponent<TextMeshProUGUI>().text = $"Type: {item.type} - {item.source}";
 
             ContentItem capturedItem = item;
             buttonGO.GetComponent<Button>().onClick.AddListener(() =>
