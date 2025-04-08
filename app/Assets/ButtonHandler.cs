@@ -7,7 +7,7 @@ public class ButtonHandler : MonoBehaviour
     public static Dictionary<string, List<ContentItem>> contentByLocation;
 
     [Header("UI References")]
-    public ContentMenuManager contentMenuManager; // Reference to ContentMenuManager
+    public ContentMenuManager contentMenuManager;
 
     void Awake()
     {

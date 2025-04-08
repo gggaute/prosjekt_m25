@@ -8,18 +8,13 @@ public class ContentMenuManager : MonoBehaviour
 {
     [Header("UI References")]
     public GameObject contentMenuContainer; // ContentMenuContainer panel
-    public Transform verticalContainer;     // VerticalContainer (has VerticalLayoutGroup)
+    public Transform buttonContainer;     // VerticalContainer (has VerticalLayoutGroup)
     public GameObject contentButtonPrefab;  // Button prefab (assigned in Inspector)
 
     public void OpenMenu(string markerId)
     {
         contentMenuContainer.SetActive(true);
 
-        // Clear existing buttons
-        foreach (Transform child in verticalContainer)
-        {
-            Destroy(child.gameObject);
-        }
 
         // Load content list
         if (!ButtonHandler.contentByLocation.ContainsKey(markerId)) return;
@@ -28,7 +23,7 @@ public class ContentMenuManager : MonoBehaviour
         // Instantiate buttons for each content piece
         foreach (var item in contentItems)
         {
-            GameObject buttonGO = Instantiate(contentButtonPrefab, verticalContainer);
+            GameObject buttonGO = Instantiate(contentButtonPrefab, buttonContainer);
 
             // Assume the prefab has a TMP child named TitleText and TypeText
             buttonGO.transform.Find("TitleText").GetComponent<TextMeshProUGUI>().text = item.title;
