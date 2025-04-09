@@ -13,7 +13,10 @@ public class ContentMenuManager : MonoBehaviour
 
     public void OpenMenu(string markerId)
     {
-        contentMenuContainer.SetActive(true);
+        foreach (Transform child in content)
+        {
+            Destroy(child.gameObject);
+        }
 
 
         // Load content list
@@ -36,6 +39,7 @@ public class ContentMenuManager : MonoBehaviour
                 SceneManager.LoadScene("AR");
             });
         }
+        contentMenuContainer.SetActive(true);
     }
 
     public void CloseMenu()
