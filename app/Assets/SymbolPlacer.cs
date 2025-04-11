@@ -19,13 +19,13 @@ public class SymbolPlacer : MonoBehaviour
 
     void Start()
     {
-        // Reload previously placed models
-        foreach (var markerContent in ButtonHandler.contentByLocation)
+        if (ButtonHandler.contentByLocation.ContainsKey(currentMarkerId))
         {
-            foreach (ContentItem content in markerContent.Value)
+            foreach (ContentItem content in ButtonHandler.contentByLocation[currentMarkerId])
             {
                 if (content.prefab != null)
                 {
+                    // Instantiate the prefab at the saved position
                     GameObject placedObject = Instantiate(content.prefab, content.position, Quaternion.identity);
 
                     // Assign the associated content to the ClickableObject script
@@ -36,6 +36,17 @@ public class SymbolPlacer : MonoBehaviour
                     }
                 }
             }
+        }
+        // Check if there is a content item to place
+        if (currentContentItem != null && currentContentItem.prefab != null)
+        {
+            // Instantiate the symbol prefab
+            symbolInstance = Instantiate(currentContentItem.prefab);
+            symbolInstance.SetActive(false); // Hide it until placement starts
+        }
+        else
+        {
+            Debug.LogError("No content item to place or prefab is missing!");
         }
     }
 
@@ -50,23 +61,52 @@ public class SymbolPlacer : MonoBehaviour
         {
             Pose hitPose = hits[0].pose;
 
-            // Move the symbol to the touch position
-            symbolInstance.transform.position = hitPose.position;
+            // Adjust the position to be at camera level
+            Vector3 adjustedPosition = hitPose.position;
+            adjustedPosition.y = Mathf.Max(hitPose.position.y, Camera.main.transform.position.y);
+
+            // Move the symbol to the adjusted position
+            symbolInstance.transform.position = adjustedPosition;
+            symbolInstance.SetActive(true);
 
             if (touch.phase == TouchPhase.Ended)
             {
                 // Finalize placement
-                PlaceSymbol(hitPose.position);
+                PlaceSymbol(adjustedPosition);
             }
         }
     }
 
     public void PlaceSymbol(Vector3 position)
     {
-        // Update the ContentItem's position
+        // Ensure the ARAnchorManager is available  
+        ARAnchorManager anchorManager = Object.FindFirstObjectByType<ARAnchorManager>();
+        if (anchorManager == null)
+        {
+            Debug.LogError("ARAnchorManager not found in the scene!");
+            return;
+        }
+
+        // Create a new GameObject to act as the anchor  
+        GameObject anchorObject = new GameObject("ARAnchor");
+        anchorObject.transform.position = position;
+        anchorObject.transform.rotation = Quaternion.identity;
+
+        // Add an ARAnchor component to the GameObject  
+        ARAnchor anchor = anchorObject.AddComponent<ARAnchor>();
+        if (anchor == null)
+        {
+            Debug.LogError("Failed to create ARAnchor!");
+            return;
+        }
+
+        // Parent the symbol instance to the anchor  
+        symbolInstance.transform.SetParent(anchorObject.transform, worldPositionStays: true);
+
+        // Update the ContentItem's position  
         currentContentItem.position = position;
 
-        // Add the content to the marker's list
+        // Add the content to the marker's list  
         if (!ButtonHandler.contentByLocation.ContainsKey(currentMarkerId))
         {
             ButtonHandler.contentByLocation[currentMarkerId] = new List<ContentItem>();
@@ -75,7 +115,7 @@ public class SymbolPlacer : MonoBehaviour
 
         Debug.Log($"Placed symbol at {position} for marker {currentMarkerId}");
 
-        // Clear the current content item
+        // Clear the current content item  
         currentContentItem = null;
         symbolInstance = null;
     }
