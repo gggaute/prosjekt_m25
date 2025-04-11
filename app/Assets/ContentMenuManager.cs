@@ -28,9 +28,40 @@ public class ContentMenuManager : MonoBehaviour
         {
             GameObject buttonGO = Instantiate(contentButtonPrefab, content);
 
-            // Assume the prefab has a TMP child named TitleText and TypeText
-            buttonGO.transform.Find("TitleText").GetComponent<TextMeshProUGUI>().text = $"Title: {item.title}";
-            buttonGO.transform.Find("TypeText").GetComponent<TextMeshProUGUI>().text = $"Type: {item.type} - {item.source}";
+            var titleText = buttonGO.transform.Find("TitleText")?.GetComponent<TextMeshProUGUI>();
+            if (titleText != null)
+            {
+                titleText.text = $"Title: {item.title}";
+            }
+
+            // Find and set the DescriptionText
+            var descriptionText = buttonGO.transform.Find("DescriptionText")?.GetComponent<TextMeshProUGUI>();
+            if (descriptionText != null)
+            {
+                // Truncate the description to the first 10 characters
+                string truncatedDescription = item.description.Length > 20
+                    ? item.description.Substring(0, 20) + "..."
+                    : item.description;
+
+                descriptionText.text = truncatedDescription;
+            }
+            var symbolImage = buttonGO.transform.Find("SymbolImage")?.GetComponent<Image>();
+            if (symbolImage != null)
+            {
+                if (item.symbol != null && item.symbol.sprite != null)
+                {
+                    symbolImage.sprite = item.symbol.sprite;
+                }
+                else
+                {
+                    Debug.LogError($"Symbol or sprite is missing for content item: {item.title}");
+                }
+            }
+            else
+            {
+                Debug.LogError("SymbolImage is missing or not an Image component in contentButtonPrefab.");
+            }
+
 
             ContentItem capturedItem = item;
             buttonGO.GetComponent<Button>().onClick.AddListener(() =>
@@ -41,7 +72,7 @@ public class ContentMenuManager : MonoBehaviour
         }
         contentMenuContainer.SetActive(true);
     }
-
+    
     public void CloseMenu()
     {
         contentMenuContainer.SetActive(false);
