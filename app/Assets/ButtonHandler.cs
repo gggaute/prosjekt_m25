@@ -43,7 +43,7 @@ public class ButtonHandler : MonoBehaviour
                 description = "This is a story about a relaxing day spent at the park.",
                 symbol = symbols[0],
                 prefab = symbols[0].prefab,
-                position = Vector3.zero // Placeholder position
+                position = Camera.main.transform.position + Camera.main.transform.forward * 1.5f + new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f)) // Placeholder position
             },
             new ContentItem
             {
@@ -51,7 +51,7 @@ public class ButtonHandler : MonoBehaviour
                 description = "A beautiful evening spent watching the sunset by the lake.",
                 symbol = symbols[1],
                 prefab = symbols[1].prefab,
-                position = Vector3.zero // Placeholder position
+                position = Camera.main.transform.position + Camera.main.transform.forward * 1.5f + new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f)) // Placeholder position
             }
         };
         contentByLocation["marker2"] = new List<ContentItem>
@@ -62,7 +62,7 @@ public class ButtonHandler : MonoBehaviour
                 description = "A long time ago i went to the park to go fetch some shoes",
                 symbol = symbols[2],
                 prefab = symbols[2].prefab,
-                position = Vector3.zero // Placeholder position
+                position = Camera.main.transform.position + Camera.main.transform.forward * 1.5f + new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f)) // Placeholder position
             },
             new ContentItem
             {
@@ -70,7 +70,7 @@ public class ButtonHandler : MonoBehaviour
                 description = "At this spot i had my last lucnh with my grandmother before she passed away",
                 symbol = symbols[3],
                 prefab = symbols[3].prefab,
-                position = Vector3.zero // Placeholder position
+                position = Camera.main.transform.position + Camera.main.transform.forward * 1.5f + new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f)) // Placeholder position
             }
         };
     }
@@ -97,7 +97,7 @@ public class ButtonHandler : MonoBehaviour
 
     public void ViewSpace()
     {
-
+        SymbolPlacer.currentMarkerId = markerId; // Set the current marker ID for SymbolPlacer
         // Load the AR scene
         SceneManager.LoadScene("AR");
     }
@@ -124,7 +124,6 @@ public class ButtonHandler : MonoBehaviour
             description = descriptionInputField.text,
             symbol = selectedSymbol,
             prefab = selectedSymbol.prefab,// Assign the selected prefab
-            position = new Vector3(Random.Range(-0.5f, 0.5f), 0, Random.Range(-0.5f, 0.5f)) // Slightly randomize position
         };
 
         // Add the new content to the current marker

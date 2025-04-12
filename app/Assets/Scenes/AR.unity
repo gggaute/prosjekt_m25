@@ -204,7 +204,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1829406847}
         m_TargetAssemblyTypeName: ARSceneManager, Assembly-CSharp
-        m_MethodName: exitAR
+        m_MethodName: ExitToHub
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -656,7 +656,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 527587100}
-  - component: {fileID: 527587099}
   m_Layer: 0
   m_Name: ClickableObject
   m_TagString: Untagged
@@ -664,27 +663,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &527587099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 527587098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f1ffdca158936742a6e656c55579712, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  associatedContent:
-    title: 
-    description: 
-    symbol:
-      name: 
-      sprite: {fileID: 0}
-      prefab: {fileID: 0}
-    prefab: {fileID: 0}
-    position: {x: 0, y: 0, z: 0}
 --- !u!4 &527587100
 Transform:
   m_ObjectHideFlags: 0
@@ -879,6 +857,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2097400323}
+  - {fileID: 1689409258}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &860981436
@@ -1079,7 +1058,7 @@ GameObject:
   - component: {fileID: 1177970885}
   - component: {fileID: 1177970884}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: ARUICanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1205,12 +1184,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1689409256}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 390.3119, y: -329.03943, z: 5075.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 860981435}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1829406846
 GameObject:
@@ -1357,7 +1336,6 @@ SceneRoots:
   - {fileID: 1942685305}
   - {fileID: 860981435}
   - {fileID: 775955951}
-  - {fileID: 1689409258}
   - {fileID: 527587100}
   - {fileID: 1177970887}
   - {fileID: 1829406848}

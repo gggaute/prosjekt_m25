@@ -2,13 +2,38 @@ using UnityEngine;
 
 public class ClickableObject : MonoBehaviour
 {
-    public ContentItem associatedContent; // The story this object represents
+    private Camera mainCamera;
+    private bool isDragging = false;
+    public ContentItem associatedContent;
 
-    private void OnMouseDown()
+    void Start()
     {
-        // This method is called when the object is tapped in the AR scene
-        Debug.Log($"Clicked on: {associatedContent.title}");
+        mainCamera = Camera.main; // Cache the main camera
+    }
 
-        // TODO: Add functionality to open the story UI or perform other actions
+    void OnMouseDown()
+    {
+        // Start dragging the object
+        isDragging = true;
+    }
+
+    void OnMouseUp()
+    {
+        // Stop dragging the object
+        isDragging = false;
+    }
+
+    void Update()
+    {
+        if (isDragging)
+        {
+            // Cast a ray from the camera to the mouse position
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                // Move the object to the hit point
+                transform.position = hit.point;
+            }
+        }
     }
 }

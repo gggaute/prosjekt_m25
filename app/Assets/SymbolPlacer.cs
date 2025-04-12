@@ -12,67 +12,106 @@ public class SymbolPlacer : MonoBehaviour
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
     private GameObject symbolInstance; // Instance of the prefab being placed
 
+    private Queue<ContentItem> dummyQueue = new Queue<ContentItem>();
+    private bool dummyPlaced = false;
+    public static List<GameObject> spawnedARObjects = new List<GameObject>();
+
     public void Awake()
     {
-        raycastManager = GetComponent<ARRaycastManager>();
+        raycastManager = GetComponentInParent<ARRaycastManager>();
+        if (raycastManager == null)
+        {
+            Debug.LogError("ARRaycastManager not found on XR Origin or its children!");
+        }
     }
 
     void Start()
     {
+        // Queue up dummy content to be placed once plane is detected
         if (ButtonHandler.contentByLocation.ContainsKey(currentMarkerId))
         {
             foreach (ContentItem content in ButtonHandler.contentByLocation[currentMarkerId])
             {
-                if (content.prefab != null)
+                // We skip currentContentItem because that one is for user placement
+                if (content != currentContentItem)
                 {
-                    // Instantiate the prefab at the saved position
-                    GameObject placedObject = Instantiate(content.prefab, content.position, Quaternion.identity);
-
-                    // Assign the associated content to the ClickableObject script
-                    ClickableObject clickable = placedObject.GetComponent<ClickableObject>();
-                    if (clickable != null)
-                    {
-                        clickable.associatedContent = content;
-                    }
+                    dummyQueue.Enqueue(content);
                 }
             }
         }
-        // Check if there is a content item to place
+
+        // Instantiate all dummy content immediately
+        if (dummyQueue.Count > 0)
+        {
+            Vector3 basePos = Camera.main.transform.position + Camera.main.transform.forward * 1.5f; // Spawn near the camera
+            int index = 0;
+
+            while (dummyQueue.Count > 0)
+            {
+                ContentItem content = dummyQueue.Dequeue();
+
+                // Offset each dummy a bit so they don't overlap
+                Vector3 offset = new Vector3(index * 0.3f, 0, 0);
+                Vector3 spawnPos = basePos + offset;
+
+                GameObject obj = Instantiate(content.prefab, spawnPos, Quaternion.identity);
+                obj.SetActive(true); // Ensure the object is active
+
+                // Optional: save this position back to the content (for future saving)
+                content.position = spawnPos;
+
+                ClickableObject clickable = obj.GetComponent<ClickableObject>();
+                if (clickable != null)
+                {
+                    clickable.associatedContent = content;
+                }
+
+                index++;
+            }
+
+            dummyPlaced = true; // Mark dummy content as placed
+        }
+
+        // Prepare the symbol to be placed by user
         if (currentContentItem != null && currentContentItem.prefab != null)
         {
-            // Instantiate the symbol prefab
             symbolInstance = Instantiate(currentContentItem.prefab);
-            symbolInstance.SetActive(false); // Hide it until placement starts
+            symbolInstance.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 0.5f; // Spawn near the camera
+            symbolInstance.SetActive(true); // Ensure the object is active
         }
         else
         {
-            Debug.LogError("No content item to place or prefab is missing!");
+            Debug.Log("No user-placed content to load");
         }
     }
 
-    public void Update()
+    void Update()
     {
-        if (symbolInstance == null || Input.touchCount == 0)
-            return;
-
-        Touch touch = Input.GetTouch(0);
-
-        if (raycastManager.Raycast(touch.position, hits, TrackableType.PlaneWithinPolygon))
+        if (raycastManager.Raycast(new Vector2(Screen.width / 2, Screen.height / 2), hits, TrackableType.PlaneWithinPolygon))
         {
             Pose hitPose = hits[0].pose;
 
-            // Adjust the position to be at camera level
-            Vector3 adjustedPosition = hitPose.position;
-            adjustedPosition.y = Mathf.Max(hitPose.position.y, Camera.main.transform.position.y);
-
-            // Move the symbol to the adjusted position
-            symbolInstance.transform.position = adjustedPosition;
-            symbolInstance.SetActive(true);
-
-            if (touch.phase == TouchPhase.Ended)
+            // If user is placing a symbol
+            if (symbolInstance != null)
             {
-                // Finalize placement
-                PlaceSymbol(adjustedPosition);
+                // Make the symbol follow the touch or mouse position
+                if (Input.touchCount > 0)
+                {
+                    Touch touch = Input.GetTouch(0);
+
+                    if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
+                    {
+                        Vector3 adjustedPosition = hitPose.position;
+                        adjustedPosition.y = Mathf.Max(hitPose.position.y, Camera.main.transform.position.y);
+
+                        symbolInstance.transform.position = adjustedPosition;
+                    }
+
+                    if (touch.phase == TouchPhase.Ended)
+                    {
+                        PlaceSymbol(symbolInstance.transform.position);
+                    }
+                }
             }
         }
     }
