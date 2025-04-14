@@ -107,9 +107,15 @@ public class ButtonHandler : MonoBehaviour
 
     public void ViewSpace()
     {
-        SymbolPlacer.currentMarkerId = markerId; // Set the current marker ID for SymbolPlacer
-        // Load the AR scene
+        Debug.Log("Entering AR space...");
         controller.ShowAR();
+
+        // Debug the state of the AR canvas
+        Debug.Log($"ARCanvas active: {controller.arCanvas.activeSelf}");
+        foreach (Transform child in controller.arCanvas.transform)
+        {
+            Debug.Log($"Child: {child.name}, Active: {child.gameObject.activeSelf}");
+        }
     }
 
     public void CreateStory()
@@ -150,8 +156,6 @@ public class ButtonHandler : MonoBehaviour
         // CloseCreateContentMenu();
 
         // Transition to AR space
-        SymbolPlacer.currentMarkerId = markerId;
-        SymbolPlacer.currentContentItem = newContent; // Pass the new content to SymbolPlacer
         controller.ShowAR();
     }
 

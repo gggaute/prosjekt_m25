@@ -11,17 +11,11 @@ public class SceneUIController : MonoBehaviour
     public GameObject createContentPanel;
 
     [Header("Camera References")]
-    public Camera rootCamera;    // The camera for the hub ui
     public Camera arCamera;      // ar camera inside XR Origin
 
-    private AudioListener rootAudioListener;
-    private AudioListener arAudioListener;
 
     private void Start()
     {
-        
-        rootAudioListener = rootCamera.GetComponent<AudioListener>();
-        arAudioListener = arCamera.GetComponent<AudioListener>();
 
         ShowHub();
         contentMenuContainer.SetActive(false);
@@ -36,26 +30,21 @@ public class SceneUIController : MonoBehaviour
         contentMenuContainer.SetActive(true);
 
         arCanvas.SetActive(false);
-
-        rootCamera.enabled = true; // Enable the root camera
-        arCamera.enabled = false; // Disable the AR camera
-
-        // Manage AudioListeners
-        if (rootAudioListener != null) rootAudioListener.enabled = true;
-        if (arAudioListener != null) arAudioListener.enabled = false;
     }
 
     public void ShowAR()
     {
+        Debug.Log("Switching to AR view...");
+
         // Enable the AR canvas and AR camera
         hubCanvas.SetActive(false);
         arCanvas.SetActive(true);
 
-        rootCamera.enabled = false; // Disable the root camera
-        arCamera.enabled = true; // Enable the AR camera
-
-        // Manage AudioListeners
-        if (rootAudioListener != null) rootAudioListener.enabled = false;
-        if (arAudioListener != null) arAudioListener.enabled = true;
+        // Debug the state of the AR canvas
+        Debug.Log($"ARCanvas active: {arCanvas.activeSelf}");
+        foreach (Transform child in arCanvas.transform)
+        {
+            Debug.Log($"Child: {child.name}, Active: {child.gameObject.activeSelf}");
+        }
     }
 }

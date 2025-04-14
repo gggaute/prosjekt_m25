@@ -92,11 +92,6 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.ARStarterAssets
             m_CancelButton.onClick.RemoveListener(HideMenu);
         }
 
-        void Start()
-        {
-            HideMenu();
-        }
-
         void Update()
         {
             if (m_ShowObjectMenu)
@@ -149,6 +144,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.ARStarterAssets
         /// </summary>
         public void HideMenu()
         {
+            Debug.Log("Hiding object menu...");
             m_ObjectMenuAnimator.SetBool("Show", false);
             m_ShowObjectMenu = false;
         }
