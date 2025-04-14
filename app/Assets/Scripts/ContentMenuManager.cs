@@ -21,9 +21,13 @@ public class ContentMenuManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-
         // Load content list
-        if (!ButtonHandler.contentByLocation.ContainsKey(markerId)) return;
+        if (!ButtonHandler.contentByLocation.ContainsKey(markerId))
+        {
+            Debug.LogError($"No content found for markerId: {markerId}");
+            return;
+        }
+
         List<ContentItem> contentItems = ButtonHandler.contentByLocation[markerId];
 
         // Instantiate buttons for each content piece
@@ -31,23 +35,36 @@ public class ContentMenuManager : MonoBehaviour
         {
             GameObject buttonGO = Instantiate(contentButtonPrefab, content);
 
+            if (buttonGO == null)
+            {
+                Debug.LogError("contentButtonPrefab is null or failed to instantiate!");
+                continue;
+            }
+
             var titleText = buttonGO.transform.Find("TitleText")?.GetComponent<TextMeshProUGUI>();
             if (titleText != null)
             {
                 titleText.text = $"Title: {item.title}";
             }
+            else
+            {
+                Debug.LogError("TitleText is missing or not a TextMeshProUGUI component in contentButtonPrefab.");
+            }
 
-            // Find and set the DescriptionText
             var descriptionText = buttonGO.transform.Find("DescriptionText")?.GetComponent<TextMeshProUGUI>();
             if (descriptionText != null)
             {
-                // Truncate the description to the first 10 characters
                 string truncatedDescription = item.description.Length > 20
                     ? item.description.Substring(0, 20) + "..."
                     : item.description;
 
                 descriptionText.text = truncatedDescription;
             }
+            else
+            {
+                Debug.LogError("DescriptionText is missing or not a TextMeshProUGUI component in contentButtonPrefab.");
+            }
+
             var symbolImage = buttonGO.transform.Find("SymbolImage")?.GetComponent<Image>();
             if (symbolImage != null)
             {
@@ -65,14 +82,22 @@ public class ContentMenuManager : MonoBehaviour
                 Debug.LogError("SymbolImage is missing or not an Image component in contentButtonPrefab.");
             }
 
-
             ContentItem capturedItem = item;
-            buttonGO.GetComponent<Button>().onClick.AddListener(() =>
+            var buttonComponent = buttonGO.GetComponent<Button>();
+            if (buttonComponent != null)
             {
-                ContentContainer.currentContent = capturedItem;
-                controller.ShowAR();
-            });
+                buttonComponent.onClick.AddListener(() =>
+                {
+                    ContentContainer.currentContent = capturedItem;
+                    controller.ShowAR();
+                });
+            }
+            else
+            {
+                Debug.LogError("contentButtonPrefab is missing a Button component.");
+            }
         }
+
         contentMenuContainer.SetActive(true);
     }
     

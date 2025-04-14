@@ -79,13 +79,21 @@ public class ButtonHandler : MonoBehaviour
 
     public void OpenMenu(Button button)
     {
-        TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
-
-        if (buttonText != null)
+        if (button == null)
         {
-            markerId = buttonText.text;
-            contentMenuManager.OpenMenu(markerId);
+            Debug.LogError("Button is null!");
+            return;
         }
+
+        TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
+        if (buttonText == null)
+        {
+            Debug.LogError("Button does not have a TMP_Text component!");
+            return;
+        }
+
+        markerId = buttonText.text;
+        contentMenuManager.OpenMenu(markerId);
     }
     public void Contribute()
     {
