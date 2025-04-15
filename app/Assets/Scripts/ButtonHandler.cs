@@ -108,7 +108,7 @@ public class ButtonHandler : MonoBehaviour
     public void ViewSpace()
     {
         Debug.Log("Entering AR space...");
-        controller.ShowAR();
+        controller.ShowARWithoutMenu();
 
         // Debug the state of the AR canvas
         Debug.Log($"ARCanvas active: {controller.arCanvas.activeSelf}");

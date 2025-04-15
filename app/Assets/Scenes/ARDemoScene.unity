@@ -385,7 +385,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2099970470}
         m_TargetAssemblyTypeName: UnityEngine.XR.Interaction.Toolkit.Samples.ARStarterAssets.ARSampleMenuManager,
           Unity.XR.Interaction.Toolkit.Samples.ARStarterAssets
-        m_MethodName: SetObjectToSpawn
+        m_MethodName: OnObjectSelected
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -931,7 +931,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2099970470}
         m_TargetAssemblyTypeName: UnityEngine.XR.Interaction.Toolkit.Samples.ARStarterAssets.ARSampleMenuManager,
           Unity.XR.Interaction.Toolkit.Samples.ARStarterAssets
-        m_MethodName: SetObjectToSpawn
+        m_MethodName: OnObjectSelected
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1524,6 +1524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34b054044a949454ebf8d1d23c710557, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menuManager: {fileID: 2099970470}
   hubCanvas: {fileID: 1511048756}
   arCanvas: {fileID: 1890055070}
   contentMenuContainer: {fileID: 308716853}
@@ -2986,7 +2987,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2099970470}
         m_TargetAssemblyTypeName: UnityEngine.XR.Interaction.Toolkit.Samples.ARStarterAssets.ARSampleMenuManager,
           Unity.XR.Interaction.Toolkit.Samples.ARStarterAssets
-        m_MethodName: SetObjectToSpawn
+        m_MethodName: OnObjectSelected
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4628,7 +4629,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2099970470}
         m_TargetAssemblyTypeName: UnityEngine.XR.Interaction.Toolkit.Samples.ARStarterAssets.ARSampleMenuManager,
           Unity.XR.Interaction.Toolkit.Samples.ARStarterAssets
-        m_MethodName: SetObjectToSpawn
+        m_MethodName: OnObjectSelected
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5575,7 +5576,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2099970470}
         m_TargetAssemblyTypeName: UnityEngine.XR.Interaction.Toolkit.Samples.ARStarterAssets.ARSampleMenuManager,
           Unity.XR.Interaction.Toolkit.Samples.ARStarterAssets
-        m_MethodName: SetObjectToSpawn
+        m_MethodName: OnObjectSelected
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8058,7 +8059,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2099970470}
         m_TargetAssemblyTypeName: UnityEngine.XR.Interaction.Toolkit.Samples.ARStarterAssets.ARSampleMenuManager,
           Unity.XR.Interaction.Toolkit.Samples.ARStarterAssets
-        m_MethodName: SetObjectToSpawn
+        m_MethodName: OnObjectSelected
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

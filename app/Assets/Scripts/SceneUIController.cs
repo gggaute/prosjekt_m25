@@ -1,9 +1,12 @@
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.Interaction.Toolkit.Samples.ARStarterAssets;
 
 public class SceneUIController : MonoBehaviour
 {
+    public ARSampleMenuManager menuManager;
+
     [Header("Canvas References")]
     public GameObject hubCanvas; // Hub ui 
     public GameObject arCanvas;  // AR ui Canvas
@@ -39,6 +42,7 @@ public class SceneUIController : MonoBehaviour
         // Enable the AR canvas and AR camera
         hubCanvas.SetActive(false);
         arCanvas.SetActive(true);
+        menuManager.objectMenu.SetActive(true);
 
         // Debug the state of the AR canvas
         Debug.Log($"ARCanvas active: {arCanvas.activeSelf}");
@@ -46,5 +50,12 @@ public class SceneUIController : MonoBehaviour
         {
             Debug.Log($"Child: {child.name}, Active: {child.gameObject.activeSelf}");
         }
+    }
+
+    public void ShowARWithoutMenu()
+    {
+        ShowAR();
+        menuManager.objectMenu.SetActive(false);
+
     }
 }
