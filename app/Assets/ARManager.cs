@@ -49,6 +49,7 @@ public class ARManager : MonoBehaviour
 
             if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
             {
+                Debug.Log("Click/touch registered");
                 PlaceSymbolAt(hitPose.position, hitPose.rotation);
             }
         }
