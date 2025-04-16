@@ -9,6 +9,7 @@ public class ButtonHandler : MonoBehaviour
     public static Dictionary<string, List<ContentItem>> contentByLocation;
 
     public SceneUIController controller;
+    public ARManager arManager; // Reference to ARManager
 
     [Header("Symbol Data")]
     public List<Symbol> symbols; // List of available symbols
@@ -33,7 +34,7 @@ public class ButtonHandler : MonoBehaviour
             new Symbol { name = "Happy", sprite = Resources.Load<Sprite>("Sprites/happy"), prefab = Resources.Load<GameObject>("Models/HappyModel") },
             new Symbol { name = "Laughing", sprite = Resources.Load<Sprite>("Sprites/laughing"), prefab = Resources.Load<GameObject>("Models/LaughingModel") },
             new Symbol { name = "Sunglasses", sprite = Resources.Load<Sprite>("Sprites/sunglasses"), prefab = Resources.Load<GameObject>("Models/SunglassesModel") },
-            new Symbol { name = "Angry", sprite = Resources.Load<Sprite>("Sprites/angry"), prefab = Resources.Load<GameObject>("Models/LaughingModel") },
+            new Symbol { name = "Angry", sprite = Resources.Load<Sprite>("Sprites/angry"), prefab = Resources.Load<GameObject>("Models/AngryModel") },
 
         };
         contentByLocation = new Dictionary<string, List<ContentItem>>();
@@ -70,8 +71,8 @@ public class ButtonHandler : MonoBehaviour
             {
                 title = "Last meal with my grandma",
                 description = "At this spot i had my last lucnh with my grandmother before she passed away",
-                symbol = symbols[3],
-                prefab = symbols[3].prefab,
+                symbol = symbols[5],
+                prefab = symbols[5].prefab,
                 position = Camera.main.transform.position + Camera.main.transform.forward * 1.5f + new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f)) // Placeholder position
             }
         };
@@ -108,14 +109,9 @@ public class ButtonHandler : MonoBehaviour
     public void ViewSpace()
     {
         Debug.Log("Entering AR space...");
-        controller.ShowARWithoutMenu();
+        arManager.LoadContentIntoARScene(markerId); // Load content into AR scene
+        controller.ShowARWithoutPlacing();
 
-        // Debug the state of the AR canvas
-        Debug.Log($"ARCanvas active: {controller.arCanvas.activeSelf}");
-        foreach (Transform child in controller.arCanvas.transform)
-        {
-            Debug.Log($"Child: {child.name}, Active: {child.gameObject.activeSelf}");
-        }
     }
 
     public void CreateStory()
@@ -142,21 +138,12 @@ public class ButtonHandler : MonoBehaviour
             prefab = selectedSymbol.prefab,// Assign the selected prefab
         };
 
-        // Add the new content to the current marker
-        if (!contentByLocation.ContainsKey(markerId))
-        {
-            contentByLocation[markerId] = new List<ContentItem>();
-        }
-        contentByLocation[markerId].Add(newContent);
 
-        Debug.Log($"Created new story for marker {markerId}: {newContent.title}");
+        CloseCreateContentMenu();
 
-        contentMenuManager.OpenMenu(markerId); // Refresh the content menu to show the new item
-
-        // CloseCreateContentMenu();
-
-        // Transition to AR space
+        // Go into AR mode and allow placement
         controller.ShowAR();
+        arManager.BeginPlacingSymbol(newContent, markerId);
     }
 
     public void ShowSymbolGrid()
