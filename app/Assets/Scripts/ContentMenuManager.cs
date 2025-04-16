@@ -8,6 +8,7 @@ using UnityEngine.Timeline;
 public class ContentMenuManager : MonoBehaviour
 {
     public SceneUIController controller;
+    public string markerId;
 
     [Header("UI References")]
     public GameObject contentMenuContainer; // ContentMenuContainer panel
@@ -16,6 +17,7 @@ public class ContentMenuManager : MonoBehaviour
 
     public void OpenMenu(string markerId)
     {
+        this.markerId = markerId;
         foreach (Transform child in content)
         {
             Destroy(child.gameObject);

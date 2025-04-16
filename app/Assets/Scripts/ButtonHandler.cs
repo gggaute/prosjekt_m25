@@ -110,7 +110,7 @@ public class ButtonHandler : MonoBehaviour
     {
         Debug.Log("Entering AR space...");
         arManager.LoadContentIntoARScene(markerId); // Load content into AR scene
-        controller.ShowARWithoutPlacing();
+        controller.ShowAR();
 
     }
 
@@ -143,6 +143,7 @@ public class ButtonHandler : MonoBehaviour
 
         // Go into AR mode and allow placement
         controller.ShowAR();
+        arManager.LoadContentIntoARScene(markerId);
         arManager.BeginPlacingSymbol(newContent, markerId);
     }
 

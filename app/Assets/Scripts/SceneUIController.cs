@@ -1,10 +1,18 @@
+using TMPro;
 using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.Interaction.Toolkit.Samples.ARStarterAssets;
 
 public class SceneUIController : MonoBehaviour
 {
+
+    public ContentMenuManager contentMenuManager;
+    public GameObject storyOverlayPanel;
+    public TMP_Text storyTitleText;
+    public TMP_Text storyDescText;
+    public Image storySymbolImage;
 
     [Header("Canvas References")]
     public GameObject hubCanvas; // Hub ui 
@@ -19,7 +27,8 @@ public class SceneUIController : MonoBehaviour
     private void Start()
     {
 
-        ShowHub();
+        hubCanvas.SetActive(true);
+        arCanvas.SetActive(false);
         contentMenuContainer.SetActive(false);
         createContentPanel.SetActive(false);
         // Start in hub mode
@@ -30,6 +39,7 @@ public class SceneUIController : MonoBehaviour
         // Enable the hub canvas and root camera
         hubCanvas.SetActive(true);
         contentMenuContainer.SetActive(true);
+        contentMenuManager.OpenMenu(contentMenuManager.markerId);
 
         arCanvas.SetActive(false);
     }
@@ -39,8 +49,9 @@ public class SceneUIController : MonoBehaviour
         Debug.Log("Switching to AR view...");
 
         // Enable the AR canvas and AR camera
+
         hubCanvas.SetActive(false);
-        arCanvas.SetActive(false);
+        arCanvas.SetActive(true);
 
         // Debug the state of the AR canvas
         Debug.Log($"ARCanvas active: {arCanvas.activeSelf}");
@@ -50,9 +61,18 @@ public class SceneUIController : MonoBehaviour
         }
     }
 
-    public void ShowARWithoutPlacing()
+    public void ShowStoryOverlay(ContentItem item)
     {
-        ShowAR();
-
+        // Show the story overlay
+        Debug.Log("Showing story overlay...");
+        storyOverlayPanel.SetActive(true);
+        storyTitleText.text = item.title;
+        storyDescText.text = item.description;
+        storySymbolImage.sprite = item.symbol.sprite;
+    }
+    public void HideStoryOverlay()
+    {         // Hide the story overlay
+        Debug.Log("Hiding story overlay...");
+        storyOverlayPanel.SetActive(false);
     }
 }
