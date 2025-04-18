@@ -10,6 +10,7 @@ public class ButtonHandler : MonoBehaviour
 
     public SceneUIController controller;
     public ARManager arManager; // Reference to ARManager
+    public GameObject contentMenuContainer;
 
     [Header("Symbol Data")]
     public List<Symbol> symbols; // List of available symbols
@@ -100,6 +101,7 @@ public class ButtonHandler : MonoBehaviour
     {
         // Show the CreateContentPanel
         createContentPanel.SetActive(true);
+        contentMenuContainer.SetActive(false);
     }
     public void CloseCreateContentMenu()
     {
@@ -151,6 +153,7 @@ public class ButtonHandler : MonoBehaviour
     {
         // Hide the CreateContentPanel and show the SymbolPanel
         createContentPanel.SetActive(false);
+        contentMenuContainer.SetActive(false);
         symbolPanelContainer.SetActive(true);
 
         // Populate the SymbolPanel with buttons
