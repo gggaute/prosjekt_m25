@@ -12,6 +12,9 @@ public class SceneUIController : MonoBehaviour
     public TMP_Text storyTitleText;
     public TMP_Text storyDescText;
     public Image storySymbolImage;
+    public GameObject placementOverlay;
+    public TMP_Text placementMessage;
+    public Image placementImage;
 
     [Header("Canvas References")]
     public GameObject hubCanvas; // Hub ui 
@@ -21,6 +24,7 @@ public class SceneUIController : MonoBehaviour
 
     [Header("Camera References")]
     public Camera arCamera;      // ar camera inside XR Origin
+
 
 
     private void Start()
@@ -73,5 +77,19 @@ public class SceneUIController : MonoBehaviour
     {         // Hide the story overlay
         Debug.Log("Hiding story overlay...");
         storyOverlayPanel.SetActive(false);
+    }
+
+    public void ShowPlacementOverlay(ContentItem item)
+    {
+        if (placementOverlay != null)
+            placementOverlay.SetActive(true);
+            placementMessage.text = "Tap where you want to place your story";
+            placementImage.sprite = item.symbol.sprite;
+    }
+
+    public void HidePlacementOverlay()
+    {
+        if (placementOverlay != null)
+            placementOverlay.SetActive(false);
     }
 }

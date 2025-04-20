@@ -31,11 +31,11 @@ public class ButtonHandler : MonoBehaviour
         symbols = new List<Symbol>
         {
             new Symbol { name = "Heart", sprite = Resources.Load<Sprite>("Sprites/heart"), prefab = Resources.Load<GameObject>("Models/HeartModel") },
-            new Symbol { name = "Balloon", sprite = Resources.Load<Sprite>("Sprites/balloon"), prefab = Resources.Load<GameObject>("Models/BalloonModel") },
-            new Symbol { name = "Happy", sprite = Resources.Load<Sprite>("Sprites/happy"), prefab = Resources.Load<GameObject>("Models/HappyModel") },
-            new Symbol { name = "Laughing", sprite = Resources.Load<Sprite>("Sprites/laughing"), prefab = Resources.Load<GameObject>("Models/LaughingModel") },
-            new Symbol { name = "Sunglasses", sprite = Resources.Load<Sprite>("Sprites/sunglasses"), prefab = Resources.Load<GameObject>("Models/SunglassesModel") },
-            new Symbol { name = "Angry", sprite = Resources.Load<Sprite>("Sprites/angry"), prefab = Resources.Load<GameObject>("Models/AngryModel") },
+            new Symbol { name = "Party", sprite = Resources.Load<Sprite>("Sprites/party"), prefab = Resources.Load<GameObject>("Models/PartyEmojiFixed") },
+            new Symbol { name = "Happy", sprite = Resources.Load<Sprite>("Sprites/happy"), prefab = Resources.Load<GameObject>("Models/HappyEmojiFixed") },
+            new Symbol { name = "Laughing", sprite = Resources.Load<Sprite>("Sprites/laughing"), prefab = Resources.Load<GameObject>("Models/LaughingEmojiFixed") },
+            new Symbol { name = "Bummed", sprite = Resources.Load<Sprite>("Sprites/bummed"), prefab = Resources.Load<GameObject>("Models/BummedEmojiFixed") },
+            new Symbol { name = "Sad", sprite = Resources.Load<Sprite>("Sprites/sad"), prefab = Resources.Load<GameObject>("Models/SadEmojiFixed") },
 
         };
         contentByLocation = new Dictionary<string, List<ContentItem>>();

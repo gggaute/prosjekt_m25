@@ -13,7 +13,6 @@ public class ARManager : MonoBehaviour
 
     private ContentItem itemToPlace;
     private string currentMarkerId;
-    private GameObject previewInstance;
 
     private bool isPlacing = false;
 
@@ -26,11 +25,10 @@ public class ARManager : MonoBehaviour
         currentMarkerId = markerId;
         isPlacing = true;
 
-        // Show a preview object that follows detected planes
+        // show placement message
         if (itemToPlace.prefab != null)
         {
-            previewInstance = Instantiate(itemToPlace.prefab);
-            previewInstance.SetActive(false); // Don't show until we get a hit
+            controller.ShowPlacementOverlay(itemToPlace); // Don't show until we get a hit
         }
     }
 
@@ -51,28 +49,21 @@ public class ARManager : MonoBehaviour
 
     private void HandlePlacement()
     {
-        List<ARRaycastHit> hits = new List<ARRaycastHit>();
-        Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
-
-        if (raycastManager.Raycast(screenCenter, hits, TrackableType.Planes))
-        {
-            Pose hitPose = hits[0].pose;
-
-            if (previewInstance != null)
-            {
-                previewInstance.SetActive(true);
-                previewInstance.transform.position = hitPose.position;
-                previewInstance.transform.rotation = hitPose.rotation;
-            }
-
 #if UNITY_EDITOR
-            if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            Vector2 touchPosition = Mouse.current.position.ReadValue();
 #else
-        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+    if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+    {
+        Vector2 touchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
 #endif
+            List<ARRaycastHit> hits = new List<ARRaycastHit>();
+            if (raycastManager.Raycast(touchPosition, hits, TrackableType.Planes))
             {
-                Debug.Log("Placing symbol...");
+                Pose hitPose = hits[0].pose;
                 PlaceSymbolAt(hitPose.position, hitPose.rotation);
+                controller.HidePlacementOverlay(); // Hide placement overlay
             }
         }
     }
@@ -84,10 +75,6 @@ public class ARManager : MonoBehaviour
         {
             Debug.LogWarning("Trying to place a symbol, but itemToPlace is null!");
             return;
-        }
-        if (previewInstance != null)
-        {
-            Destroy(previewInstance);
         }
 
         GameObject placedObject = Instantiate(itemToPlace.prefab, position, rotation);
