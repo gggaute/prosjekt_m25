@@ -62,7 +62,8 @@ public class ARManager : MonoBehaviour
             if (raycastManager.Raycast(touchPosition, hits, TrackableType.Planes))
             {
                 Pose hitPose = hits[0].pose;
-                PlaceSymbolAt(hitPose.position, hitPose.rotation);
+                Quaternion uprightRotation = Quaternion.Euler(0, arCamera.transform.eulerAngles.y, 0);
+                PlaceSymbolAt(hitPose.position, uprightRotation);
                 controller.HidePlacementOverlay(); // Hide placement overlay
             }
         }
