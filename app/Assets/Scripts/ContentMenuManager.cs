@@ -85,19 +85,6 @@ public class ContentMenuManager : MonoBehaviour
             }
 
             ContentItem capturedItem = item;
-            var buttonComponent = buttonGO.GetComponent<Button>();
-            if (buttonComponent != null)
-            {
-                buttonComponent.onClick.AddListener(() =>
-                {
-                    ContentContainer.currentContent = capturedItem;
-                    controller.ShowAR();
-                });
-            }
-            else
-            {
-                Debug.LogError("contentButtonPrefab is missing a Button component.");
-            }
         }
 
         contentMenuContainer.SetActive(true);
