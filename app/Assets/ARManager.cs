@@ -10,6 +10,7 @@ public class ARManager : MonoBehaviour
     public SceneUIController controller;
     public ARRaycastManager raycastManager;
     public Camera arCamera;
+    [SerializeField] private ARAnchorManager anchorManager;
 
     private ContentItem itemToPlace;
     private string currentMarkerId;
@@ -62,14 +63,15 @@ public class ARManager : MonoBehaviour
             if (raycastManager.Raycast(touchPosition, hits, TrackableType.Planes))
             {
                 Pose hitPose = hits[0].pose;
+                Vector3 forwardOffset = arCamera.transform.forward * 0.05f;
                 Quaternion uprightRotation = Quaternion.Euler(0, arCamera.transform.eulerAngles.y, 0);
-                PlaceSymbolAt(hitPose.position, uprightRotation);
+                PlaceSymbolAt(hitPose.position + forwardOffset, uprightRotation, hits[0]);
                 controller.HidePlacementOverlay(); // Hide placement overlay
             }
         }
     }
 
-    private void PlaceSymbolAt(Vector3 position, Quaternion rotation)
+    private void PlaceSymbolAt(Vector3 position, Quaternion rotation, ARRaycastHit hit)
     {
 
         if (itemToPlace == null)
@@ -77,8 +79,23 @@ public class ARManager : MonoBehaviour
             Debug.LogWarning("Trying to place a symbol, but itemToPlace is null!");
             return;
         }
+        ARPlane plane = hit.trackable as ARPlane;
+        if (plane == null)
+        {
+            Debug.LogError("No ARPlane found for anchor attachment.");
+            return;
+        }
 
-        GameObject placedObject = Instantiate(itemToPlace.prefab, position, rotation);
+        ARAnchor anchor = anchorManager.AttachAnchor(plane, new Pose(position, rotation));
+
+        if (anchor == null)
+        {
+            Debug.LogError("Failed to create anchor!");
+            return;
+        }
+
+        // Instantiate symbol
+        GameObject placedObject = Instantiate(itemToPlace.prefab, anchor.transform);
         placedObject.name = $"{currentMarkerId}_{itemToPlace.title}";
         placedObjects.Add(placedObject);
 
@@ -87,7 +104,7 @@ public class ARManager : MonoBehaviour
 
         itemToPlace.position = position;
 
-        // Save it to the content list
+        // Save to  content list
         if (!ButtonHandler.contentByLocation.ContainsKey(currentMarkerId))
         {
             ButtonHandler.contentByLocation[currentMarkerId] = new List<ContentItem>();
