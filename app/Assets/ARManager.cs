@@ -17,7 +17,7 @@ public class ARManager : MonoBehaviour
 
     private bool isPlacing = false;
 
-    private List<GameObject> placedObjects = new List<GameObject>();
+    private Dictionary<string, List<GameObject>> spawnedObjectsByMarker = new Dictionary<string, List<GameObject>>();
 
 
     public void BeginPlacingSymbol(ContentItem item, string markerId)
@@ -97,7 +97,12 @@ public class ARManager : MonoBehaviour
         // Instantiate symbol
         GameObject placedObject = Instantiate(itemToPlace.prefab, anchor.transform);
         placedObject.name = $"{currentMarkerId}_{itemToPlace.title}";
-        placedObjects.Add(placedObject);
+
+        if (!spawnedObjectsByMarker.ContainsKey(currentMarkerId))
+        {
+            spawnedObjectsByMarker[currentMarkerId] = new List<GameObject>();
+        }
+        spawnedObjectsByMarker[currentMarkerId].Add(placedObject);
 
         ContentComponent cc = placedObject.AddComponent<ContentComponent>();
         cc.contentItem = itemToPlace;
@@ -122,11 +127,7 @@ public class ARManager : MonoBehaviour
     public void LoadContentIntoARScene(string markerId)
     {
         // Clear previously loaded symbols
-        foreach (var obj in placedObjects)
-        {
-            if (obj != null) Destroy(obj);
-        }
-        placedObjects.Clear();
+        ClearAllSpawnedObjects();
 
         if (ButtonHandler.contentByLocation == null)
         {
@@ -151,8 +152,26 @@ public class ARManager : MonoBehaviour
             ContentComponent cc = instantiatedObject.AddComponent<ContentComponent>();
             cc.contentItem = contentItem;
 
+            if (!spawnedObjectsByMarker.ContainsKey(markerId))
+            {
+                spawnedObjectsByMarker[markerId] = new List<GameObject>();
+            }
+            spawnedObjectsByMarker[markerId].Add(instantiatedObject);
+
             Debug.Log($"Loaded '{contentItem.title}' into AR scene at position {contentItem.position}.");
         }
+    }
+
+    private void ClearAllSpawnedObjects()
+    {
+        foreach (var kvp in spawnedObjectsByMarker)
+        {
+            foreach (var obj in kvp.Value)
+            {
+                if (obj != null) Destroy(obj);
+            }
+        }
+        spawnedObjectsByMarker.Clear();
     }
 
     private void HandleTouchInteraction()
