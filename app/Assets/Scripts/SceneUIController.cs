@@ -3,6 +3,7 @@ using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
+using System.Collections;
 
 public class SceneUIController : MonoBehaviour
 {
@@ -15,12 +16,19 @@ public class SceneUIController : MonoBehaviour
     public GameObject placementOverlay;
     public TMP_Text placementMessage;
     public Image placementImage;
+    public GameObject placementConfirmationPanel;
+    public GameObject cancelPlacementButton;
+
+    public GameObject symbolPanel;
 
     [Header("Canvas References")]
     public GameObject hubCanvas; // Hub ui 
     public GameObject arCanvas;  // AR ui Canvas
     public GameObject contentMenuContainer;
     public GameObject createContentPanel;
+
+    public ButtonHandler buttonHandler;
+
 
     [Header("Camera References")]
     public Camera arCamera;      // ar camera inside XR Origin
@@ -73,6 +81,7 @@ public class SceneUIController : MonoBehaviour
         storyDescText.text = item.description;
         storySymbolImage.sprite = item.symbol.sprite;
     }
+
     public void HideStoryOverlay()
     {         // Hide the story overlay
         Debug.Log("Hiding story overlay...");
@@ -91,5 +100,49 @@ public class SceneUIController : MonoBehaviour
     {
         if (placementOverlay != null)
             placementOverlay.SetActive(false);
+    }
+
+    public void ShowPlacementConfirmation()
+    {
+        StopAllCoroutines(); // In case it's already fading
+        placementConfirmationPanel.SetActive(true);
+        StartCoroutine(HideAfterDelay(2f));
+    }
+
+    private IEnumerator HideAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        placementConfirmationPanel.SetActive(false);
+    }
+
+    public void ShowCancelPlacement() 
+    {
+        cancelPlacementButton.SetActive(true);
+    }
+    public void HideCancelPlacement()
+    {
+        cancelPlacementButton.SetActive(false);
+    }
+
+    public void ResetCreateStoryFields()
+    {
+        // Clear text fields and selected symbol
+        buttonHandler.titleInputField.text = "";
+        buttonHandler.descriptionInputField.text = "";
+        buttonHandler.ResetSelectedSymbol();
+    }
+    public void ShowCreateContentMenu()
+    {
+        createContentPanel.SetActive(true);
+        contentMenuContainer.SetActive(false);
+    }
+    public void ShowSymbols()
+    {
+        symbolPanel.SetActive(true);
+    }
+    public void SymbolCancel()
+    {
+        symbolPanel.SetActive(false);
+        ShowCreateContentMenu();
     }
 }

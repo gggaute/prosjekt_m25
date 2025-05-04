@@ -4,6 +4,7 @@ using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.EventSystems;
 
 public class ARManager : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class ARManager : MonoBehaviour
         itemToPlace = item;
         currentMarkerId = markerId;
         isPlacing = true;
+
+        controller.ShowCancelPlacement();
 
         // show placement message
         if (itemToPlace.prefab != null)
@@ -53,11 +56,20 @@ public class ARManager : MonoBehaviour
 #if UNITY_EDITOR
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
             Vector2 touchPosition = Mouse.current.position.ReadValue();
 #else
-    if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+    if (Input.touchCount > 0 && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
     {
-        Vector2 touchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
+        Touch touch = Input.GetTouch(0);
+
+        if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            return;
+
+        Vector2 touchPosition = touch.position;
 #endif
             List<ARRaycastHit> hits = new List<ARRaycastHit>();
             if (raycastManager.Raycast(touchPosition, hits, TrackableType.Planes))
@@ -119,9 +131,14 @@ public class ARManager : MonoBehaviour
 
         Debug.Log($"Placed '{itemToPlace.title}' at position {position}");
 
+        // Show confirmation
+        controller.ShowPlacementConfirmation();
+        controller.HideCancelPlacement();
+
         isPlacing = false;
         itemToPlace = null;
         currentMarkerId = null;
+
     }
 
     public void LoadContentIntoARScene(string markerId)
@@ -178,28 +195,65 @@ public class ARManager : MonoBehaviour
     {
 #if UNITY_EDITOR
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-#else
-    if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
-#endif
         {
-            Debug.Log("Screen tapped!");
-            Vector2 touchPosition = new Vector2(Screen.width / 2f, Screen.height / 2f); // or use touch position
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+            Vector2 touchPosition = Mouse.current.position.ReadValue();
+#else
+    if (Input.touchCount > 0 && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+    {
+        Touch touch = Input.GetTouch(0);
 
+        // Prevent taps on UI on mobile
+        if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+            return;
+
+        Vector2 touchPosition = touch.position;
+#endif
             Ray ray = arCamera.ScreenPointToRay(touchPosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 GameObject hitObject = hit.transform.gameObject;
                 Debug.Log($"Hit object: {hitObject.name}");
 
-                // Check if it's a content object
                 ContentComponent component = hitObject.GetComponent<ContentComponent>();
                 if (component != null)
                 {
                     Debug.Log($"Tapped on {component.contentItem.title}");
-                    // Trigger the UI display
                     controller.ShowStoryOverlay(component.contentItem);
                 }
             }
         }
     }
+
+    public void CancelPlacement()
+    {
+        isPlacing = false;
+        itemToPlace = null;
+
+        controller.HidePlacementOverlay();
+        controller.HideCancelPlacement();
+
+        controller.ShowHub();
+        controller.ShowCreateContentMenu();
+    }
+
+    public void ExitARViewAndReset()
+    {
+        isPlacing = false;
+        itemToPlace = null;
+        currentMarkerId = null;
+
+        controller.HidePlacementOverlay();
+        controller.HideCancelPlacement();
+
+        // clear input fields
+        controller.ResetCreateStoryFields();
+
+        controller.ShowHub();
+    }
+
+
 }

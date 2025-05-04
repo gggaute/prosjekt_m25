@@ -26,6 +26,9 @@ public class ButtonHandler : MonoBehaviour
     public TMP_InputField descriptionInputField; // Reference to the description input field
     public string markerId; // which marker are we at
 
+
+    public Button createButton;
+
     public void Awake()
     {
         symbols = new List<Symbol>
@@ -77,6 +80,9 @@ public class ButtonHandler : MonoBehaviour
                 position = Camera.main.transform.position + Camera.main.transform.forward * 1.5f + new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f)) // Placeholder position
             }
         };
+        createButton.interactable = false;
+        titleInputField.onValueChanged.AddListener(delegate { ValidateCreateButton(); });
+        descriptionInputField.onValueChanged.AddListener(delegate { ValidateCreateButton(); });
     }
 
     public void OpenMenu(Button button)
@@ -106,6 +112,7 @@ public class ButtonHandler : MonoBehaviour
     public void CloseCreateContentMenu()
     {
         createContentPanel.SetActive(false);
+        contentMenuContainer.SetActive(true);
     }
 
     public void ViewSpace()
@@ -154,9 +161,7 @@ public class ButtonHandler : MonoBehaviour
         // Hide the CreateContentPanel and show the SymbolPanel
         createContentPanel.SetActive(false);
         contentMenuContainer.SetActive(false);
-        symbolPanelContainer.SetActive(true);
-
-        // Populate the SymbolPanel with buttons
+        controller.ShowSymbols();
         PopulateSymbolGrid();
     }
 
@@ -193,10 +198,26 @@ public class ButtonHandler : MonoBehaviour
         Debug.Log($"Selected symbol: {symbol.name}");
 
         // Hide the SymbolPanel and return to the CreateContentPanel
-        symbolPanelContainer.SetActive(false);
+        controller.SymbolCancel();
         createContentPanel.SetActive(true);
+
+        ValidateCreateButton();
 
     }
 
-    
+    public void ResetSelectedSymbol()
+    {
+        selectedSymbol = null;
+        createButton.interactable = false;
+    }
+
+    public void ValidateCreateButton()
+    {
+        bool isTitleValid = !string.IsNullOrWhiteSpace(titleInputField.text);
+        bool isSymbolSelected = selectedSymbol != null;
+        bool isDescriptionValid = !string.IsNullOrWhiteSpace(descriptionInputField.text);
+
+        createButton.interactable = isTitleValid && isSymbolSelected && isDescriptionValid;
+    }
+
 }
