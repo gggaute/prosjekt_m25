@@ -120,6 +120,7 @@ public class ButtonHandler : MonoBehaviour
         Debug.Log("Entering AR space...");
         arManager.LoadContentIntoARScene(markerId); // Load content into AR scene
         controller.ShowAR();
+        controller.ShowInstruction("Explore the space - tap a symbol to read a story!");
 
     }
 

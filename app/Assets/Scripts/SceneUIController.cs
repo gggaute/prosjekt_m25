@@ -21,6 +21,9 @@ public class SceneUIController : MonoBehaviour
 
     public GameObject symbolPanel;
 
+    public GameObject instructionPanel;
+    public TMP_Text instructionText;
+
     [Header("Canvas References")]
     public GameObject hubCanvas; // Hub ui 
     public GameObject arCanvas;  // AR ui Canvas
@@ -106,13 +109,7 @@ public class SceneUIController : MonoBehaviour
     {
         StopAllCoroutines(); // In case it's already fading
         placementConfirmationPanel.SetActive(true);
-        StartCoroutine(HideAfterDelay(2f));
-    }
-
-    private IEnumerator HideAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        placementConfirmationPanel.SetActive(false);
+        StartCoroutine(ShowInstructionAfterConfirmation(2f));
     }
 
     public void ShowCancelPlacement() 
@@ -145,4 +142,28 @@ public class SceneUIController : MonoBehaviour
         symbolPanel.SetActive(false);
         ShowCreateContentMenu();
     }
+
+    public void ShowInstruction(string message, float duration = 5f)
+    {
+        instructionText.text = message;
+        instructionPanel.SetActive(true);
+        StopAllCoroutines();
+        StartCoroutine(HideInstructionAfterDelay(duration));
+    }
+
+    private IEnumerator HideInstructionAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        instructionPanel.SetActive(false);
+    }
+
+    private IEnumerator ShowInstructionAfterConfirmation(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        placementConfirmationPanel.SetActive(false);
+
+        // Now show the next instruction
+        ShowInstruction("Tap a symbol to read a story.");
+    }
+
 }
