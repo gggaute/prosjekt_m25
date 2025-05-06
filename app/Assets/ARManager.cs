@@ -56,20 +56,11 @@ public class ARManager : MonoBehaviour
 #if UNITY_EDITOR
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                return;
-            }
             Vector2 touchPosition = Mouse.current.position.ReadValue();
 #else
-    if (Input.touchCount > 0 && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
-    {
-        Touch touch = Input.GetTouch(0);
-
-        if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
-            return;
-
-        Vector2 touchPosition = touch.position;
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+        {
+            Vector2 touchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
 #endif
             List<ARRaycastHit> hits = new List<ARRaycastHit>();
             if (raycastManager.Raycast(touchPosition, hits, TrackableType.Planes))
@@ -196,21 +187,11 @@ public class ARManager : MonoBehaviour
 #if UNITY_EDITOR
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                return;
-            }
             Vector2 touchPosition = Mouse.current.position.ReadValue();
 #else
-    if (Input.touchCount > 0 && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+    if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
     {
-        Touch touch = Input.GetTouch(0);
-
-        // Prevent taps on UI on mobile
-        if (EventSystem.current.IsPointerOverGameObject(touch.fingerId))
-            return;
-
-        Vector2 touchPosition = touch.position;
+        Vector2 touchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
 #endif
             Ray ray = arCamera.ScreenPointToRay(touchPosition);
             if (Physics.Raycast(ray, out RaycastHit hit))
@@ -228,17 +209,18 @@ public class ARManager : MonoBehaviour
         }
     }
 
+
     public void CancelPlacement()
-    {
-        isPlacing = false;
-        itemToPlace = null;
+        {
+            isPlacing = false;
+            itemToPlace = null;
 
-        controller.HidePlacementOverlay();
-        controller.HideCancelPlacement();
+            controller.HidePlacementOverlay();
+            controller.HideCancelPlacement();
 
-        controller.ShowHub();
-        controller.ShowCreateContentMenu();
-    }
+            controller.ShowHub();
+            controller.ShowCreateContentMenu();
+        }
 
     public void ExitARViewAndReset()
     {
