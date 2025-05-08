@@ -184,6 +184,14 @@ public class ARManager : MonoBehaviour
 
     private void HandleTouchInteraction()
     {
+        if (controller.storyOverlayPanel.activeSelf ||
+        controller.hubCanvas.activeSelf ||
+        controller.symbolPanel.activeSelf)
+        {
+            return;
+        }
+
+
 #if UNITY_EDITOR
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {

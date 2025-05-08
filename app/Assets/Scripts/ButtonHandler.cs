@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class ButtonHandler : MonoBehaviour
 {
+
+    [Header("Test Config")]
+    public string allowedMarkerId = "marker1";
+
     public static Dictionary<string, List<ContentItem>> contentByLocation;
 
     public SceneUIController controller;
@@ -80,6 +84,17 @@ public class ButtonHandler : MonoBehaviour
                 position = Camera.main.transform.position + Camera.main.transform.forward * 1.5f + new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f)) // Placeholder position
             }
         };
+        contentByLocation["marker3"] = new List<ContentItem>
+        {
+            new ContentItem
+            {
+                title = "A letter to my future self",
+                description = "I stood here and imagined where I'd be in 5 years.",
+                symbol = symbols[4],
+                prefab = symbols[4].prefab,
+                position = Camera.main.transform.position + Camera.main.transform.forward * 1.5f + new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f))
+            }
+        };
         createButton.interactable = false;
         titleInputField.onValueChanged.AddListener(delegate { ValidateCreateButton(); });
         descriptionInputField.onValueChanged.AddListener(delegate { ValidateCreateButton(); });
@@ -97,6 +112,16 @@ public class ButtonHandler : MonoBehaviour
         if (buttonText == null)
         {
             Debug.LogError("Button does not have a TMP_Text component!");
+            return;
+        }
+
+        string clickedMarker = buttonText.text;
+
+        if (clickedMarker != allowedMarkerId)
+        {
+            Debug.Log($"Blocked marker {clickedMarker} — this build is only for {allowedMarkerId}");
+            // Optional: show message to user
+            controller.ShowInstruction("This marker is not available on this device.");
             return;
         }
 

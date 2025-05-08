@@ -24,6 +24,9 @@ public class SceneUIController : MonoBehaviour
     public GameObject instructionPanel;
     public TMP_Text instructionText;
 
+    public GameObject instructionPanel_Hub;
+    public TMP_Text instructionText_Hub;
+
     [Header("Canvas References")]
     public GameObject hubCanvas; // Hub ui 
     public GameObject arCanvas;  // AR ui Canvas
@@ -145,17 +148,29 @@ public class SceneUIController : MonoBehaviour
 
     public void ShowInstruction(string message, float duration = 5f)
     {
-        instructionText.text = message;
-        instructionPanel.SetActive(true);
         StopAllCoroutines();
-        StartCoroutine(HideInstructionAfterDelay(duration));
+
+        if (arCanvas.activeSelf)
+        {
+            instructionText.text = message;
+            instructionPanel.SetActive(true);
+            StartCoroutine(HideInstructionAfterDelay(instructionPanel));
+        }
+        else if (hubCanvas.activeSelf)
+        {
+            instructionText_Hub.text = message;
+            instructionPanel_Hub.SetActive(true);
+            StartCoroutine(HideInstructionAfterDelay(instructionPanel_Hub));
+        }
     }
 
-    private IEnumerator HideInstructionAfterDelay(float delay)
+
+    private IEnumerator HideInstructionAfterDelay(GameObject panel)
     {
-        yield return new WaitForSeconds(delay);
-        instructionPanel.SetActive(false);
+        yield return new WaitForSeconds(5f);
+        panel.SetActive(false);
     }
+
 
     private IEnumerator ShowInstructionAfterConfirmation(float delay)
     {
