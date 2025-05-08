@@ -43,43 +43,64 @@ public class ButtonHandler : MonoBehaviour
         };
         contentByLocation = new Dictionary<string, List<ContentItem>>();
         contentByLocation["marker1"] = new List<ContentItem>
-        {
-            new ContentItem
-            {
-                title = "A Day at the Park",
-                description = "This is a story about a relaxing day spent at the park.",
-                symbol = symbols[0],
-                prefab = symbols[0].prefab,
-                position = Camera.main.transform.position + Camera.main.transform.forward * 1.5f + new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f)) // Placeholder position
-            },
-            new ContentItem
-            {
-                title = "Evening by the Lake",
-                description = "A beautiful evening spent watching the sunset by the lake.",
-                symbol = symbols[1],
-                prefab = symbols[1].prefab,
-                position = Camera.main.transform.position + Camera.main.transform.forward * 1.5f + new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f)) // Placeholder position
-            }
-        };
+{
+    new ContentItem
+    {
+        title = "The Day Everything Clicked",
+        description = "Right after class, I sat on the steps here and realized what I wanted to do with my life.",
+        symbol = symbols[2], // Happy
+        prefab = symbols[2].prefab,
+        position = Camera.main.transform.position + Camera.main.transform.forward * 2.0f + new Vector3(0.3f, 0, 0.1f)
+    },
+    new ContentItem
+    {
+        title = "Laughing Until the Lights Came On",
+        description = "We stayed here talking after sunset, just laughing until the city lights below turned on.",
+        symbol = symbols[3], // Laughing
+        prefab = symbols[3].prefab,
+        position = Camera.main.transform.position + Camera.main.transform.forward * 1.8f + new Vector3(-0.5f, 0, -0.2f)
+    }
+};
+
         contentByLocation["marker2"] = new List<ContentItem>
-        {
-            new ContentItem
-            {
-                title = "My first solo trip",
-                description = "A long time ago i went to the park to go fetch some shoes",
-                symbol = symbols[2],
-                prefab = symbols[2].prefab,
-                position = Camera.main.transform.position + Camera.main.transform.forward * 1.5f + new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f)) // Placeholder position
-            },
-            new ContentItem
-            {
-                title = "Last meal with my grandma",
-                description = "At this spot i had my last lucnh with my grandmother before she passed away",
-                symbol = symbols[5],
-                prefab = symbols[5].prefab,
-                position = Camera.main.transform.position + Camera.main.transform.forward * 1.5f + new Vector3(Random.Range(-0.2f, 0.2f), 0, Random.Range(-0.2f, 0.2f)) // Placeholder position
-            }
-        };
+{
+    new ContentItem
+    {
+        title = "A Quiet Moment of Gratitude",
+        description = "I took a minute here before heading home, just looking out over the city, feeling thankful.",
+        symbol = symbols[0], // Heart
+        prefab = symbols[0].prefab,
+        position = Camera.main.transform.position + Camera.main.transform.forward * 2.5f + new Vector3(0.5f, 0, 0.1f)
+    },
+    new ContentItem
+    {
+        title = "End of Exams, Start of Summer",
+        description = "After finishing our last exam, we sat here with snacks and music, just taking in the view.",
+        symbol = symbols[2], // happy
+        prefab = symbols[2].prefab,
+        position = Camera.main.transform.position + Camera.main.transform.forward * 2.0f + new Vector3(-0.4f, 0, 0.3f)
+    }
+};
+
+        contentByLocation["marker3"] = new List<ContentItem>
+{
+    new ContentItem
+    {
+        title = "A Quiet Moment of Gratitude",
+        description = "I took a minute here before heading home, just looking out over the city, feeling thankful.",
+        symbol = symbols[0], // Heart
+        prefab = symbols[0].prefab,
+        position = Camera.main.transform.position + Camera.main.transform.forward * 2.5f + new Vector3(0.5f, 0, 0.1f)
+    },
+    new ContentItem
+    {
+        title = "Wishing Things Were Different",
+        description = "This is where I came when everything felt too loud — I needed to think, and breathe.",
+        symbol = symbols[4], // Bummed
+        prefab = symbols[4].prefab,
+        position = Camera.main.transform.position + Camera.main.transform.forward * 1.7f + new Vector3(-0.3f, 0, -0.4f)
+    }
+};
         createButton.interactable = false;
         titleInputField.onValueChanged.AddListener(delegate { ValidateCreateButton(); });
         descriptionInputField.onValueChanged.AddListener(delegate { ValidateCreateButton(); });
