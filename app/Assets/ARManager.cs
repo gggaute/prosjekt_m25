@@ -238,6 +238,7 @@ public class ARManager : MonoBehaviour
 
         controller.HidePlacementOverlay();
         controller.HideCancelPlacement();
+        controller.HideStoryOverlay();
 
         // clear input fields
         controller.ResetCreateStoryFields();
