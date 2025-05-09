@@ -81,8 +81,8 @@ public class ButtonHandler : MonoBehaviour
                 {
                     title = "End of Exams, Start of Summer",
                     description = "After finishing our last exam, we sat here with snacks and music, just taking in the view.",
-                    symbol = symbols[1], // Party
-                    prefab = symbols[1].prefab,
+                    symbol = symbols[2], // Party
+                    prefab = symbols[2].prefab,
                     position = Camera.main.transform.position + Camera.main.transform.forward * 3.2f + new Vector3(1.5f, -1.4f, -0.3f)
                 }
             };
