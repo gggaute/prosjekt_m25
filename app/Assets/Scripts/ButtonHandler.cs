@@ -59,6 +59,14 @@ public class ButtonHandler : MonoBehaviour
         symbol = symbols[3], // Laughing
         prefab = symbols[3].prefab,
         position = Camera.main.transform.position + Camera.main.transform.forward * 1.8f + new Vector3(-0.5f, 0, -0.2f)
+    },
+    new ContentItem
+    {
+        title = "End of Exams, Start of Summer",
+        description = "After finishing our last exam, we sat here with snacks and music, just taking in the view.",
+        symbol = symbols[2], // happy
+        prefab = symbols[2].prefab,
+        position = Camera.main.transform.position + Camera.main.transform.forward * 2.0f + new Vector3(-0.4f, 0, 0.3f)
     }
 };
 
